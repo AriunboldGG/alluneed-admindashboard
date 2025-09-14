@@ -49,7 +49,7 @@ export default function AddTvProductForm({ isOpen, onClose }: AddTvProductFormPr
     status: "Active"
   });
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -76,7 +76,7 @@ export default function AddTvProductForm({ isOpen, onClose }: AddTvProductFormPr
     }));
   };
 
-  const handleLocationChange = (index: number, field: string, value: any) => {
+  const handleLocationChange = (index: number, field: string, value: string | number) => {
     const newLocations = [...formData.locations];
     newLocations[index] = { ...newLocations[index], [field]: value };
     setFormData(prev => ({ ...prev, locations: newLocations }));
