@@ -2,8 +2,27 @@
 
 import { useState } from "react";
 
+// Billboard product type
+interface BillboardProduct {
+  id: number;
+  code: string;
+  name: string;
+  location: string;
+  latitude: number;
+  longitude: number;
+  category: string;
+  size: string;
+  views: number;
+  pricePerView: number;
+  status: string;
+  description: string;
+  street: string;
+  district: string;
+  avenue: string;
+}
+
 // Demo Billboard products data with coordinates
-const billboardProducts = [
+const billboardProducts: BillboardProduct[] = [
   {
     id: 1,
     code: "K1",
@@ -96,7 +115,7 @@ export default function BillboardAdvertisingList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [sizeFilter, setSizeFilter] = useState("All");
-  const [selectedBillboard, setSelectedBillboard] = useState(null);
+  const [selectedBillboard, setSelectedBillboard] = useState<BillboardProduct | null>(null);
   const [viewMode, setViewMode] = useState("list");
 
   // Filter products based on selected filters

@@ -2,8 +2,29 @@
 
 import { useState } from "react";
 
+// Liftboard product type
+interface LiftboardProduct {
+  id: number;
+  code: string;
+  name: string;
+  location: string;
+  latitude: number;
+  longitude: number;
+  category: string;
+  size: string;
+  floor: string;
+  building: string;
+  views: number;
+  pricePerView: number;
+  status: string;
+  description: string;
+  street: string;
+  district: string;
+  avenue: string;
+}
+
 // Demo Liftboard products data with coordinates
-const liftboardProducts = [
+const liftboardProducts: LiftboardProduct[] = [
   {
     id: 1,
     code: "L1",
@@ -107,7 +128,7 @@ export default function LiftboardAdvertisingList() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [sizeFilter, setSizeFilter] = useState("All");
   const [floorFilter, setFloorFilter] = useState("All");
-  const [selectedLiftboard, setSelectedLiftboard] = useState(null);
+  const [selectedLiftboard, setSelectedLiftboard] = useState<LiftboardProduct | null>(null);
   const [viewMode, setViewMode] = useState("list");
 
   // Filter products based on selected filters
