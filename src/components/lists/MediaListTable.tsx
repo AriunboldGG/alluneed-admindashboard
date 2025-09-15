@@ -50,14 +50,15 @@ export default function MediaListTable<T extends BaseMediaItem>({
 
   const filteredItems = items.filter((item) => {
     const matchesCategory = filters.selectedCategory === "All" || 
-      (item as any).category === filters.selectedCategory;
+      (item as Record<string, unknown>).category === filters.selectedCategory;
     const matchesSearch = item.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-      ((item as any).username && (item as any).username.toLowerCase().includes(filters.searchTerm.toLowerCase()));
+      ((item as Record<string, unknown>).username && 
+       String((item as Record<string, unknown>).username).toLowerCase().includes(filters.searchTerm.toLowerCase()));
     const matchesStatus = filters.statusFilter === "All" || item.status === filters.statusFilter;
     
     const matchesAdditionalFilters = additionalFilters.every(filter => {
       const filterValue = filters[filter.key];
-      return filterValue === "All" || (item as any)[filter.key] === filterValue;
+      return filterValue === "All" || (item as Record<string, unknown>)[filter.key] === filterValue;
     });
     
     return matchesCategory && matchesSearch && matchesStatus && matchesAdditionalFilters;
@@ -73,8 +74,8 @@ export default function MediaListTable<T extends BaseMediaItem>({
     }
     
     const value = column.key.includes('.') 
-      ? column.key.split('.').reduce((obj, key) => (obj as any)?.[key], item)
-      : (item as any)[column.key];
+      ? column.key.split('.').reduce((obj, key) => (obj as Record<string, unknown>)?.[key], item as Record<string, unknown>)
+      : (item as Record<string, unknown>)[column.key];
     
     return value?.toString() || '';
   };

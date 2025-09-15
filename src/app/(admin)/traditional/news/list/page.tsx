@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import type { Metadata } from "next";
+import { useState } from "react";
 
 // Demo News products data with categories
 const newsProducts = [

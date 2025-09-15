@@ -9,7 +9,6 @@ import {
   BoxIcon,
   CalenderIcon,
   ChevronDownIcon,
-  GridIcon,
   GroupIcon,
   HorizontaLDots,
   ListIcon,
