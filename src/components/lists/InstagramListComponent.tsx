@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import MediaListTable from "./MediaListTable";
+import AddItemModal from "@/components/common/AddItemModal";
 import { InfluencerItem } from "@/types/media";
 
 // Demo Instagram influencers data
@@ -105,6 +106,8 @@ const instagramInfluencers: InfluencerItem[] = [
 
 export default function InstagramListComponent() {
   const [selectedItem, setSelectedItem] = useState<InfluencerItem | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [items, setItems] = useState(instagramInfluencers);
   const [editData, setEditData] = useState<InfluencerItem | null>(null);
 
   // Initialize edit data when item is selected
@@ -246,11 +249,70 @@ export default function InstagramListComponent() {
     console.log('Delete item:', item);
   };
 
+  const handleAddNew = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleSaveNew = (data: any) => {
+    const newItem: InfluencerItem = {
+      id: Math.max(...items.map(item => item.id)) + 1,
+      name: data.name,
+      username: data.username,
+      category: data.category,
+      followers: parseInt(data.followers) || 0,
+      engagement: parseFloat(data.engagement) || 0,
+      pricePerPost: parseInt(data.pricePerPost) || 0,
+      status: data.status || 'Active',
+      location: data.location || 'Ulaanbaatar, Mongolia',
+      verified: data.verified === 'true',
+      description: data.description || '',
+      contact: data.contact || '',
+      languages: data.languages ? data.languages.split(',').map((lang: string) => lang.trim()) : [],
+      specialties: data.specialties ? data.specialties.split(',').map((spec: string) => spec.trim()) : [],
+      lastPost: data.lastPost || new Date().toISOString().split('T')[0],
+      avgLikes: parseInt(data.avgLikes) || 0,
+      avgComments: parseInt(data.avgComments) || 0
+    };
+    setItems(prev => [...prev, newItem]);
+  };
+
+  const instagramFields = [
+    { key: 'name', label: 'Influencer Name', type: 'text' as const, required: true, placeholder: 'Enter influencer name' },
+    { key: 'username', label: 'Username', type: 'text' as const, required: true, placeholder: '@username' },
+    { key: 'category', label: 'Category', type: 'select' as const, required: true, options: ['Beauty & Fashion', 'Food & Travel', 'Lifestyle', 'Technology', 'Fitness', 'Business'] },
+    { key: 'followers', label: 'Followers', type: 'number' as const, required: true, placeholder: 'Number of followers' },
+    { key: 'engagement', label: 'Engagement Rate (%)', type: 'number' as const, required: true, placeholder: 'e.g., 4.2' },
+    { key: 'pricePerPost', label: 'Price per Post', type: 'number' as const, required: true, placeholder: 'Price in MNT' },
+    { key: 'location', label: 'Location', type: 'text' as const, required: true, placeholder: 'e.g., Ulaanbaatar, Mongolia' },
+    { key: 'contact', label: 'Contact Email', type: 'email' as const, required: false, placeholder: 'contact@example.com' },
+    { key: 'description', label: 'Description', type: 'textarea' as const, required: false, placeholder: 'Brief description' }
+  ];
+
   return (
     <>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Instagram Influencers
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage your Instagram influencer partnerships
+          </p>
+        </div>
+        <button
+          onClick={handleAddNew}
+          className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Add New Item
+        </button>
+      </div>
+
       <MediaListTable
-        items={instagramInfluencers}
-        title="Instagram Influencers"
+        items={items}
+        title=""
         themeColor="text-pink-500"
         categories={categories}
         columns={columns}
@@ -545,6 +607,15 @@ export default function InstagramListComponent() {
           </div>
         </div>
       )}
+
+      {/* Add New Item Modal */}
+      <AddItemModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleSaveNew}
+        title="Instagram Influencer"
+        fields={instagramFields}
+      />
     </>
   );
 }

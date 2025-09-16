@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import MediaListTable from "./MediaListTable";
+import AddItemModal from "@/components/common/AddItemModal";
 import { TraditionalMediaItem } from "@/types/media";
 
 // Demo TV products data
@@ -86,6 +87,8 @@ const tvProducts: TraditionalMediaItem[] = [
 export default function TvListComponent() {
   const [selectedItem, setSelectedItem] = useState<TraditionalMediaItem | null>(null);
   const [editData, setEditData] = useState<TraditionalMediaItem | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [items, setItems] = useState(tvProducts);
   const [adminSettings, setAdminSettings] = useState({
     broadcastTime: "17:00 - 00:00",
     dailyFrequency: "1",
@@ -245,11 +248,65 @@ export default function TvListComponent() {
     console.log('Delete item:', item);
   };
 
+  const handleAddNew = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleSaveNew = (data: any) => {
+    const newItem: TraditionalMediaItem = {
+      id: Math.max(...items.map(item => item.id)) + 1,
+      name: data.name,
+      category: data.category,
+      status: data.status || 'Active',
+      location: data.location || 'Ulaanbaatar, Mongolia',
+      price: data.price || '₮0',
+      area: parseInt(data.area) || 0,
+      views: parseInt(data.views) || 0,
+      circulation: data.circulation || '0',
+      publishDate: data.publishDate || new Date().toISOString().split('T')[0],
+      section: data.section || '',
+      size: data.size || '',
+      description: data.description || ''
+    };
+    setItems(prev => [...prev, newItem]);
+  };
+
+  const tvFields = [
+    { key: 'name', label: 'Product Name', type: 'text' as const, required: true, placeholder: 'Enter product name' },
+    { key: 'category', label: 'Category', type: 'select' as const, required: true, options: ['National TV', 'Commercial TV', 'Sports TV', 'Music TV'] },
+    { key: 'section', label: 'Time Slot', type: 'text' as const, required: true, placeholder: 'e.g., Prime Time' },
+    { key: 'size', label: 'Duration', type: 'text' as const, required: true, placeholder: 'e.g., 30 seconds' },
+    { key: 'views', label: 'Viewers', type: 'number' as const, required: true, placeholder: 'Number of viewers' },
+    { key: 'price', label: 'Price', type: 'text' as const, required: true, placeholder: 'e.g., ₮15,000,000' },
+    { key: 'publishDate', label: 'Air Date', type: 'text' as const, required: true, placeholder: 'YYYY-MM-DD' },
+    { key: 'description', label: 'Description', type: 'textarea' as const, required: false, placeholder: 'Enter description' }
+  ];
+
   return (
     <>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            TV Advertising Products
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage your TV advertising slots
+          </p>
+        </div>
+        <button
+          onClick={handleAddNew}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Add New Item
+        </button>
+      </div>
+
       <MediaListTable
-        items={tvProducts}
-        title="TV Advertising Products"
+        items={items}
+        title=""
         themeColor="text-blue-500"
         categories={categories}
         columns={columns}
@@ -401,58 +458,6 @@ export default function TvListComponent() {
                           />
                         </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Нэг хоногт</label>
-                        <input 
-                          type="text" 
-                          value={`₮${pricingSettings.pricePerDay}`}
-                          onChange={(e) => setPricingSettings(prev => ({...prev, pricePerDay: e.target.value.replace(/[₮,]/g, '')}))}
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-black dark:text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Нэг удаа</label>
-                        <input 
-                          type="text" 
-                          value={`₮${pricingSettings.pricePerCount}`}
-                          onChange={(e) => setPricingSettings(prev => ({...prev, pricePerCount: e.target.value.replace(/[₮,]/g, '')}))}
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-black dark:text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Нэг секундэд</label>
-                        <input 
-                          type="text" 
-                          value={`₮${pricingSettings.pricePerSecond}`}
-                          onChange={(e) => setPricingSettings(prev => ({...prev, pricePerSecond: e.target.value.replace(/[₮,]/g, '')}))}
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-black dark:text-white"
-                        />
-                      </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Нэг хүнд хүрч буй зардал</label>
-                              <div className="bg-blue-50 dark:bg-blue-900 p-3 rounded-md">
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-2xl font-bold text-blue-600 dark:text-blue-300">₮</span>
-                                  <input 
-                                    type="text" 
-                                    value={performanceMetrics.costPerPerson}
-                                    onChange={(e) => setPerformanceMetrics(prev => ({...prev, costPerPerson: e.target.value}))}
-                                    className="text-2xl font-bold text-blue-600 dark:text-blue-300 bg-transparent border-none outline-none w-24"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Нийт хүртээмж</label>
-                              <div className="bg-green-50 dark:bg-green-900 p-3 rounded-md">
-                                <input 
-                                  type="text" 
-                                  value={performanceMetrics.totalReach}
-                                  onChange={(e) => setPerformanceMetrics(prev => ({...prev, totalReach: e.target.value}))}
-                                  className="text-2xl font-bold text-green-600 dark:text-green-300 bg-transparent border-none outline-none w-24"
-                                />
-                              </div>
-                            </div>
                     </div>
                   </div>
                 </div>
@@ -620,6 +625,38 @@ export default function TvListComponent() {
                         </div>
                       </div>
                     </div>
+
+                    {/* Performance Metrics */}
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                      <h3 className="font-semibold text-black dark:text-white mb-4">Үзүүлэлт</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Нэг хүнд хүрч буй зардал</label>
+                          <div className="bg-blue-50 dark:bg-blue-900 p-3 rounded-md">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-2xl font-bold text-blue-600 dark:text-blue-300">₮</span>
+                              <input 
+                                type="text" 
+                                value={performanceMetrics.costPerPerson}
+                                onChange={(e) => setPerformanceMetrics(prev => ({...prev, costPerPerson: e.target.value}))}
+                                className="text-2xl font-bold text-blue-600 dark:text-blue-300 bg-transparent border-none outline-none w-24"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Нийт хүртээмж</label>
+                          <div className="bg-green-50 dark:bg-green-900 p-3 rounded-md">
+                            <input 
+                              type="text" 
+                              value={performanceMetrics.totalReach}
+                              onChange={(e) => setPerformanceMetrics(prev => ({...prev, totalReach: e.target.value}))}
+                              className="text-2xl font-bold text-green-600 dark:text-green-300 bg-transparent border-none outline-none w-24"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </div>
 
@@ -656,6 +693,15 @@ export default function TvListComponent() {
           </div>
         </div>
       )}
+
+      {/* Add New Item Modal */}
+      <AddItemModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleSaveNew}
+        title="TV Product"
+        fields={tvFields}
+      />
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import MediaListTable from "./MediaListTable";
+import AddItemModal from "@/components/common/AddItemModal";
 import { YouTubeInfluencerItem } from "@/types/media";
 
 // Demo YouTube influencers data
@@ -85,6 +86,8 @@ const youtubeInfluencers: YouTubeInfluencerItem[] = [
 
 export default function YouTubeListComponent() {
   const [selectedItem, setSelectedItem] = useState<YouTubeInfluencerItem | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [items, setItems] = useState(youtubeInfluencers);
 
   // Hide header when modal is open
   useEffect(() => {
@@ -209,11 +212,64 @@ export default function YouTubeListComponent() {
     console.log('Delete item:', item);
   };
 
+  const handleAddNew = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleSaveNew = (data: any) => {
+    const newItem: YouTubeInfluencerItem = {
+      id: Math.max(...items.map(item => item.id)) + 1,
+      channelName: data.channelName,
+      username: data.username,
+      category: data.category,
+      subscribers: parseInt(data.subscribers) || 0,
+      avgViews: parseInt(data.avgViews) || 0,
+      pricePerVideo: parseInt(data.pricePerVideo) || 0,
+      status: data.status || 'Active',
+      location: data.location || 'Ulaanbaatar, Mongolia',
+      verified: data.verified === 'true',
+      followers: parseInt(data.subscribers) || 0,
+      engagement: parseFloat(data.engagement) || 0,
+      pricePerPost: parseInt(data.pricePerVideo) || 0
+    };
+    setItems(prev => [...prev, newItem]);
+  };
+
+  const youtubeFields = [
+    { key: 'channelName', label: 'Channel Name', type: 'text' as const, required: true, placeholder: 'Enter channel name' },
+    { key: 'username', label: 'Username', type: 'text' as const, required: true, placeholder: '@username' },
+    { key: 'category', label: 'Category', type: 'select' as const, required: true, options: ['Lifestyle & Vlogs', 'Food & Cooking', 'Tech Reviews', 'Gaming', 'Education', 'Entertainment'] },
+    { key: 'subscribers', label: 'Subscribers', type: 'number' as const, required: true, placeholder: 'Number of subscribers' },
+    { key: 'avgViews', label: 'Average Views', type: 'number' as const, required: true, placeholder: 'Average views per video' },
+    { key: 'pricePerVideo', label: 'Price per Video', type: 'number' as const, required: true, placeholder: 'Price in MNT' },
+    { key: 'location', label: 'Location', type: 'text' as const, required: true, placeholder: 'e.g., Ulaanbaatar, Mongolia' }
+  ];
+
   return (
     <>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            YouTube Influencers
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage your YouTube influencer partnerships
+          </p>
+        </div>
+        <button
+          onClick={handleAddNew}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Add New Item
+        </button>
+      </div>
+
       <MediaListTable
-        items={youtubeInfluencers}
-        title="YouTube Influencers"
+        items={items}
+        title=""
         themeColor="text-red-500"
         categories={categories}
         columns={columns}
@@ -283,6 +339,15 @@ export default function YouTubeListComponent() {
           </div>
         </div>
       )}
+
+      {/* Add New Item Modal */}
+      <AddItemModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleSaveNew}
+        title="YouTube Influencer"
+        fields={youtubeFields}
+      />
     </>
   );
 }

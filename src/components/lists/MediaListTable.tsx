@@ -86,10 +86,11 @@ export default function MediaListTable<T extends BaseMediaItem>({
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <input type="checkbox" className="w-4 h-4 text-blue-600" />
-              <h3 className="font-medium text-black dark:text-white text-xl">
-                {title}
-              </h3>
+              {title && (
+                <h3 className="font-medium text-black dark:text-white text-xl">
+                  {title}
+                </h3>
+              )}
             </div>
             <div className="flex gap-2">
               {categories.slice(0, 2).map((category) => (
