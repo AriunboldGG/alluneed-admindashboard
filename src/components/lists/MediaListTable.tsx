@@ -86,7 +86,7 @@ export default function MediaListTable<T extends BaseMediaItem>({
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <input type="checkbox" className={`w-4 h-4 ${themeColor}`} />
+              <input type="checkbox" className="w-4 h-4 text-blue-600" />
               <h3 className="font-medium text-black dark:text-white text-xl">
                 {title}
               </h3>
@@ -98,7 +98,7 @@ export default function MediaListTable<T extends BaseMediaItem>({
                   onClick={() => handleFilterChange('selectedCategory', category)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition duration-200 ${
                     filters.selectedCategory === category
-                      ? `bg-${themeColor.split('-')[1]}-500 text-white`
+                      ? "bg-blue-500 text-white"
                       : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
                   }`}
                 >
@@ -109,7 +109,7 @@ export default function MediaListTable<T extends BaseMediaItem>({
                 onClick={() => handleFilterChange('selectedCategory', 'All')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition duration-200 ${
                   filters.selectedCategory === 'All'
-                    ? `bg-${themeColor.split('-')[1]}-500 text-white`
+                    ? "bg-blue-500 text-white"
                     : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
                 }`}
               >

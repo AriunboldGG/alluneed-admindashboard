@@ -8,6 +8,7 @@ import { FacebookInfluencerItem } from "@/types/media";
 const facebookInfluencers: FacebookInfluencerItem[] = [
   {
     id: 1,
+    name: "Mongolian Business Network",
     pageName: "Mongolian Business Network",
     username: "@mongolianbusiness",
     category: "Business & Finance",
@@ -20,6 +21,7 @@ const facebookInfluencers: FacebookInfluencerItem[] = [
   },
   {
     id: 2,
+    name: "UB Community News",
     pageName: "UB Community News",
     username: "@ubcommunitynews",
     category: "News & Media",
@@ -32,6 +34,7 @@ const facebookInfluencers: FacebookInfluencerItem[] = [
   },
   {
     id: 3,
+    name: "Mongolian Food Lovers",
     pageName: "Mongolian Food Lovers",
     username: "@mongolianfoodlovers",
     category: "Food & Lifestyle",
@@ -44,6 +47,7 @@ const facebookInfluencers: FacebookInfluencerItem[] = [
   },
   {
     id: 4,
+    name: "Tech Mongolia Hub",
     pageName: "Tech Mongolia Hub",
     username: "@techmongoliahub",
     category: "Technology",
@@ -56,6 +60,7 @@ const facebookInfluencers: FacebookInfluencerItem[] = [
   },
   {
     id: 5,
+    name: "Mongolian Parents Group",
     pageName: "Mongolian Parents Group",
     username: "@mongolianparents",
     category: "Parenting & Family",
